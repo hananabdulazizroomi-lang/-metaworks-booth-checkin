@@ -282,7 +282,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
     </div>
     <h1 class="title">Thank you!</h1>
-    <p class="subtitle">We appreciate you taking the time to share with us.</p>
+    <p class="subtitle">Thank you for visiting Meta Works. Meta Works is glad to greet you!</p>
 
     <div class="divider"><div class="line"></div><div class="dot"></div><div class="line"></div></div>
 
@@ -558,8 +558,7 @@ function renderThanks(){
   document.getElementById('quote-text').innerHTML =
     `"${line1}"<span class="signoff">${line2 || ''}</span>`;
 
-  document.getElementById('email-note').textContent =
-    `Your info has been saved. We'll be in touch!`;
+  document.getElementById('email-note').textContent = '';
   show('thanks');
 }
 </script>
