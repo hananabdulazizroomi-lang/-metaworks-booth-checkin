@@ -47,9 +47,9 @@
     border-radius: 28px;
     border: 1px solid var(--line);
     box-shadow: 0 20px 50px -25px rgba(138,109,26,0.35);
-    padding: 40px 30px 32px;
-    min-height: 560px;
-    max-height: 90vh;
+    padding: 24px 22px 20px;
+    min-height: auto;
+    max-height: 95vh;
     display:flex;
     flex-direction: column;
     overflow: hidden;
@@ -72,8 +72,8 @@
   }
 
   #screen-splash{ align-items:center; justify-content:center; cursor:pointer; }
-  #screen-splash img{ width:150px; margin-bottom: 16px; }
-  #screen-splash .wordmark{ font-size: 28px; margin-bottom: 26px; }
+  #screen-splash img{ width:120px; margin-bottom: 12px; }
+  #screen-splash .wordmark{ font-size: 28px; margin-bottom: 16px; }
   .tap-hint{
     font-size: 12px; color: var(--muted); letter-spacing:0.08em; text-transform:uppercase;
     animation: pulse 1.8s ease-in-out infinite;
@@ -81,26 +81,24 @@
   @keyframes pulse{ 0%,100%{opacity:0.4;} 50%{opacity:1;} }
 
   .lang-selector{
-    position:absolute; top:16px; right:16px;
-    display:flex; gap:4px; background:rgba(255,255,255,0.9);
-    border:1px solid var(--line); border-radius:10px; padding:3px;
+    position:absolute; top:12px; right:12px;
     z-index:10;
   }
-  body[dir="rtl"] .lang-selector{ right:auto; left:16px; }
-  .lang-btn{
-    border:none; background:transparent; padding:5px 10px;
-    font-size:11px; font-weight:600; border-radius:7px;
-    cursor:pointer; color:var(--muted); transition:all .15s;
-    font-family:'Inter', sans-serif;
-  }
-  .lang-btn.active{
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
-    color:#fff;
+  body[dir="rtl"] .lang-selector{ right:auto; left:12px; }
+  .lang-selector select{
+    padding:6px 24px 6px 10px; font-size:12px; font-weight:600;
+    border:1px solid var(--line); border-radius:8px;
+    background:rgba(255,255,255,0.95); color:var(--ink);
+    cursor:pointer; font-family:'Inter', sans-serif;
+    -webkit-appearance:none; appearance:none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238A8478' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 6px center;
   }
 
   .steps{
     display:flex; align-items:center; justify-content:center;
-    gap:0; margin: 22px 0 30px;
+    gap:0; margin: 12px 0 16px;
   }
   .step-dot{
     width:26px; height:26px; border-radius:50%;
@@ -119,12 +117,12 @@
   .step-line.done{ background: linear-gradient(90deg, var(--gold-dark), var(--gold-mid)); }
 
   h1.title{ font-size: 21px; font-weight:700; margin-bottom: 4px; text-align:center; }
-  p.subtitle{ font-size:13px; color: var(--muted); text-align:center; margin-bottom: 26px; }
+  p.subtitle{ font-size:13px; color: var(--muted); text-align:center; margin-bottom: 14px; }
 
-  .field{ margin-bottom: 18px; }
+  .field{ margin-bottom: 12px; }
   .field label{ display:block; font-size:12.5px; font-weight:600; margin-bottom:7px; color: var(--ink); }
   .field input{
-    width:100%; padding: 12px 14px; font-size:14.5px;
+    width:100%; padding: 10px 12px; font-size:14px;
     border: 1px solid var(--line); border-radius: 10px;
     font-family:'Inter', sans-serif; color: var(--ink);
     outline:none; transition: border-color .2s;
@@ -135,7 +133,7 @@
 
   .phone-row{ display:flex; gap:8px; }
   .phone-row select{
-    width: 130px; flex-shrink:0; padding: 12px 8px; font-size:14px;
+    width: 130px; flex-shrink:0; padding: 10px 8px; font-size:13px;
     border: 1px solid var(--line); border-radius: 10px;
     font-family:'Inter', sans-serif; color: var(--ink);
     outline:none; background: #FFFEFC; cursor:pointer;
@@ -152,7 +150,7 @@
   .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; }
   .chip{
     display:flex; align-items:center; gap:6px;
-    padding: 9px 14px; border-radius: 999px;
+    padding: 7px 12px; border-radius: 999px;
     border: 1.3px solid var(--line); background:#FFFEFC;
     font-size: 13px; font-weight:500; color: var(--ink);
     cursor:pointer; transition: all .15s;
@@ -168,9 +166,9 @@
   .spacer{ flex:1; }
 
   .btn{
-    width:100%; padding: 14px; border:none; border-radius: 12px;
+    width:100%; padding: 12px; border:none; border-radius: 12px;
     font-family:'Inter', sans-serif; font-weight:600; font-size:15px;
-    cursor:pointer; margin-top: 18px; transition: opacity .2s, transform .15s;
+    cursor:pointer; margin-top: 12px; transition: opacity .2s, transform .15s;
   }
   .btn:active{ transform: scale(0.98); }
   .btn-gold{ background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid)); color:#fff; }
@@ -222,7 +220,15 @@
 
   <!-- SPLASH -->
   <div class="screen active" id="screen-splash" style="position:relative;">
-    <div class="lang-selector" id="lang-selector"></div>
+    <div class="lang-selector">
+      <select id="lang-select">
+        <option value="en">EN</option>
+        <option value="ar">AR</option>
+        <option value="fr">FR</option>
+        <option value="hi">HI</option>
+        <option value="ur">UR</option>
+      </select>
+    </div>
     <div style="position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--gold-dark),var(--gold-mid));color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;letter-spacing:0.06em;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
       LEAP 2026
@@ -237,7 +243,7 @@
   <div class="screen" id="screen-form">
     <div class="brand-block">
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAClCAYAAAD1R9cMAAC1SElEQVR4nMz9d4AcxbX/gX6qunvS5qRdaZVzllAAJJJA5BydA9i+jjjghI0DzjlejA0YGwecwDY552gkQFmgnONK2rw7Mx2q3h8dpmd2diXuvb/3XsNqZ3uqqyt869T3nDp1Sniep4ldQgjQGh1+BrTWoDUEf8fTlrkdXVrrAfcEQZ7oMBNKH9faQysFQiClgRAyyk9rhcYDFaRFIg0TKcDzPLT2EEIgkH75pURojVKu/3ZpDFJWPzdRWhkNiOK6RCUWmrAaCBGl0drPR8TulWuX8F0D3skgbVeUn18w/1kdlR8G9tGx5Td0+tK0Q/W7n760HqLMd4X0pW3yVq74M+ZQCQc2z/88VSH1wIYdkEIrtFaAQGuJEP47FBqtFEIIpGnF3poFz8YwagADpQHlobVCItAieK8GgQb8ARKMXaLRUa4eovDraCU/1mswoP8vciReukK9YKj+GboMxXmWgu+tAm9owVf+/UIMPbDK5WkOlEgaHUqOsPB+TkVSG0pfdvQuF0JEwCqtkC/RQGmNCGDnA9oHuBAGhpBg+mD0nG76Ow9w5OB69rz5JL1HjtA6aQmjpi2htmkMWGk/bwClQAtfohL+lDSej/YSieLfi1ojlCxBoUUwWMJKhI0db6OhpK8e5Jn4c4N3aDl0iOh3Ibvi58tJwoH3dOz9pfmUn3HCGSl2tzRVmTLrKP/4ICxtv8HaoNwAEUqpotQ6DvuiabYox1ja2BRcWtx4QQQxoFKgFEFV49RDKQ3aAwSGWZhEsj1HOLJ/A4d3r6Jt52u07V5BT8cRPHMYjpvAyh+gqXEYLRNPZtj4uYycfAJVzVMA8FwbIWREXxjQ9mIAtShKp4N6RmlCwBeJw5JnRfzxwudB0peCuhT4YZoi+jMEbThaXoOXoVDagWUdCMxygA4BV66qxfAajCZptB4oJIsHeuHZCOSDAVpQXJliQPv/+NJWlB0pYVELwy4AdPh3fGjGKhmnAwDK6efgns3s2ryMLase5dCu18CzydS10jRiFpPnnsvE484lWVHL4Z2vsP7lu9nxxqvY3ftpbm5iwvHvZPLid2FlGvA8Fxk1SEAzhKSYgpTOOhRxZVEK/JI2j/8pIJrtwrYvbdeiZh0C0PHvj0ZZjpWTD/5soQb/vwP04Ly/8N1RAB1NpWUyLHml36lohBalXxZXPVAwo0FSqElRAQkK6Cttmr7OXezftpZNKx5n49rn6Oo5QvPI8cycdwZT555N09jFRe9Snoc0Cgrfkd2vsvb5v7BnzX2Mn3YCcy7+LhX1E/A8D4FX6DMpASMoi1/nsJ0LAAqmRhG/r9EU9UxRwxa3WayjBeV7mRIgBuUolcbxdxyrdIaB4BhsUBQD2i97sSIaPlucb3lAl3tHKAB1STMU3js43QrThc8XBl7UJmWtHLFCFWUWCSoR/O9PCyLWAKVlDIVbwTJATEErDAalFEKC8mx2rX+EVU/+hl1bN5Gon8jE2adz3MJzaRq3IMra7j3EgT1vkKkdTmPL5KKKe0phSF/qdux5nmV3fRYpMyy86mfUtS7A81y0cpFCooVAiHAgxKSFjlpw4AwUF8FBO5WVUv6XFGOkWACUA+yxSNOhOHb4slh3l31P6VUMkHKgHMitS+lQIZ+CMIiVrujZ0u9KZ6Jy7Vpc35KOgLcCaBFJjcLUGQBblwd06ZRTgH6B1oSX57kYhkU+e4A/f/+ddGxbyWUf/zmTTromSmPbOYSGbPce3nzx92xY8QjN40/g+LM/QVX9aDwnizQMEhVNaMDO9pJMV+Lm9vPSH/+Lwwf3sOhtP2LE1LNRWqGcHNJIxAqqAwoiokYqEgrxWpbw7gENX7ZF/AHOUG3M/wzQZYEViZ+3Cuj4LFBMDcqoV4OU6VgB7aeN8+W3BujiuhSZ7QZhDrGHS1KK2J8l..."
-         alt="Metaworks" style="width:60px;">
+         alt="Metaworks" style="width:50px;">
     </div>
 
     <div class="steps">
@@ -280,7 +286,7 @@
   <div class="screen" id="screen-processing">
     <div class="brand-block">
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAClCAYAAAD1R9cMAAC1SElEQVR4nMz9d4AcxbX/gX6qunvS5qRdaZVzllAAJJJA5BydA9i+jjjghI0DzjlejA0YGwecwDY552gkQFmgnONK2rw7Mx2q3h8dpmd2diXuvb/3XsNqZ3uqqyt869T3nDp1Sniep4ldQgjQGh1+BrTWoDUEf8fTlrkdXVrrAfcEQZ7oMBNKH9faQysFQiClgRAyyk9rhcYDFaRFIg0TKcDzPLT2EEIgkH75pURojVKu/3ZpDFJWPzdRWhkNiOK6RCUWmrAaCBGl0drPR8TulWuX8F0D3skgbVeUn18w/1kdlR8G9tGx5Td0+tK0Q/W7n760HqLMd4X0pW3yVq74M+ZQCQc2z/88VSH1wIYdkEIrtFaAQGuJEP47FBqtFEIIpGnF3poFz8YwagADpQHlobVCItAieK8GgQb8ARKMXaLRUa4eovDraCU/1mswoP8vciReukK9YKj+GboMxXmWgu+tAm9owVf+/UIMPbDK5WkOlEgaHUqOsPB+TkVSG0pfdvQuF0JEwCqtkC/RQGmNCGDnA9oHuBAGhpBg+mD0nG76Ow9w5OB69rz5JL1HjtA6aQmjpi2htmkMWGk/bwClQAtfohL+lDSej/YSieLfi1ojlCxBoUUwWMJKhI0db6OhpK8e5Jn4c4N3aDl0iOh3Ibvi58tJwoH3dOz9pfmUn3HCGSl2tzRVmTLrKP/4ICxtv8HaoNwAEUqpotQ6DvuiabYox1ja2BRcWtx4QQQxoFKgFEFV49RDKQ3aAwSGWZhEsj1HOLJ/A4d3r6Jt52u07V5BT8cRPHMYjpvAyh+gqXEYLRNPZtj4uYycfAJVzVMA8FwbIWREXxjQ9mIAtShKp4N6RmlCwBeJw5JnRfzxwudB0peCuhT4YZoi+jMEbThaXoOXoVDagWUdCMxygA4BV66qxfAajCZptB4oJIsHeuHZCOSDAVpQXJliQPv/+NJWlB0pYVELwy4AdPh3fGjGKhmnAwDK6efgns3s2ryMLase5dCu18CzydS10jRiFpPnnsvE484lWVHL4Z2vsP7lu9nxxqvY3ftpbm5iwvHvZPLid2FlGvA8Fxk1SEAzhKSYgpTOOhRxZVEK/JI2j/8pIJrtwrYvbdeiZh0C0PHvj0ZZjpWTD/5soQb/vwP04Ly/8N1RAB1NpWUyLHml36lohBalXxZXPVAwo0FSqElRAQkK6Cttmr7OXezftpZNKx5n49rn6Oo5QvPI8cycdwZT555N09jFRe9Snoc0Cgrfkd2vsvb5v7BnzX2Mn3YCcy7+LhX1E/A8D4FX6DMpASMoi1/nsJ0LAAqmRhG/r9EU9UxRwxa3WayjBeV7mRIgBuUolcbxdxyrdIaB4BhsUBQD2i97sSIaPlucb3lAl3tHKAB1STMU3js43QrThc8XBl7UJmWtHLFCFWUWCSoR/O9PCyLWAKVlDIVbwTJATEErDAalFEKC8mx2rX+EVU/+hl1bN5Gon8jE2adz3MJzaRq3IMra7j3EgT1vkKkdTmPL5KKKe0phSF/qdux5nmV3fRYpMyy86mfUtS7A81y0cpFCooVAiHAgxKSFjlpw4AwUF8FBO5WVUv6XFGOkWACUA+yxSNOhOHb4slh3l31P6VUMkHKgHMitS+lQIZ+CMIiVrujZ0u9KZ6Jy7Vpc35KOgLcCaBFJjcLUGQBblwd06ZRTgH6B1oSX57kYhkU+e4A/f/+ddGxbyWUf/zmTTromSmPbOYSGbPce3nzx92xY8QjN40/g+LM/QVX9aDwnizQMEhVNaMDO9pJMV+Lm9vPSH/+Lwwf3sOhtP2LE1LNRWqGcHNJIxAqqAwoiokYqEgrxWpbw7gENX7ZF/AHOUG3M/wzQZYEViZ+3Cuj4LFBMDcqoV4OU6VgB7aeN8+W3BujiuhSZ7QZhDrGHS1KK2J8l..."
-         alt="Metaworks" style="width:60px;">
+         alt="Metaworks" style="width:50px;">
     </div>
     <div class="spinner"></div>
     <div class="processing-text" data-i18n="processing">Writing your welcome note...</div>
@@ -470,9 +476,7 @@ function applyLanguage() {
   });
   const isRTL = currentLang === 'ar' || currentLang === 'ur';
   document.body.dir = isRTL ? 'rtl' : 'ltr';
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === currentLang);
-  });
+  langSelect.value = currentLang;
   buildChips();
 }
 
@@ -535,23 +539,12 @@ COUNTRY_CODES.forEach(c => {
 });
 countrySelect.value = "+1";
 
-const langSelector = document.getElementById('lang-selector');
-const LANGS = [
-  {code:'en',label:'EN'},{code:'ar',label:'AR'},{code:'fr',label:'FR'},
-  {code:'hi',label:'HI'},{code:'ur',label:'UR'}
-];
-LANGS.forEach(l => {
-  const btn = document.createElement('button');
-  btn.className = 'lang-btn';
-  btn.dataset.lang = l.code;
-  btn.textContent = l.label;
-  btn.onclick = (e) => {
-    e.stopPropagation();
-    currentLang = l.code;
-    applyLanguage();
-  };
-  langSelector.appendChild(btn);
-});
+const langSelect = document.getElementById('lang-select');
+langSelect.onclick = (e) => e.stopPropagation();
+langSelect.onchange = () => {
+  currentLang = langSelect.value;
+  applyLanguage();
+};
 
 const answers = { name:"", email:"", phone:"", interest:"" };
 
