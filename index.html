@@ -6,6 +6,7 @@
 <title>Metaworks — Booth Check-in</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
 
@@ -309,6 +310,10 @@ const CONFIG = {
   ]
 };
 
+const SUPABASE_URL = "https://bveiweldbvlwbgzvoovd.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZWl3ZWxkYnZsd2JnenZvb3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTQ2MjUsImV4cCI6MjEwMzIzMDYyNX0.Asyz75q_tu_Hab_RkLXg72Bv2p9hVkiSRV6fhCF6ZvA";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const answers = { name:"", email:"", phone:"", interest:"" };
 
 const screens = {
@@ -373,7 +378,14 @@ nextBtn.onclick = () => {
    STAFF VIEW — load all captured leads + Excel export
    ============================================================ */
 async function loadLeads(){
-  return getLeads().sort((a,b) => (b.ts||0) - (a.ts||0));
+  try{
+    const { data, error } = await supabase
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if(error) throw error;
+    return data || [];
+  }catch(e){ console.warn('Supabase load failed', e); return []; }
 }
 
 async function openStaffView(){
@@ -403,7 +415,7 @@ function exportLeadsToExcel(leads){
   const headers = ['Name','Email','Phone','Interest','Message Sent','Captured At'];
   const rows = leads.map(l => [
     l.name, l.email, l.phone, l.interest, l.message,
-    l.ts ? new Date(l.ts).toLocaleString() : ''
+    l.created_at ? new Date(l.created_at).toLocaleString() : ''
   ]);
   const csv = [headers, ...rows].map(r => r.map(csvEscape).join(',')).join('\r\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -429,18 +441,18 @@ document.getElementById('done-btn').onclick = () => {
 };
 
 /* ============================================================
-   STORAGE — lead log via localStorage (works on GitHub Pages)
+   STORAGE — lead log via Supabase
    ============================================================ */
-function getLeads(){
-  try{ return JSON.parse(localStorage.getItem('metaworks_leads') || '[]'); }
-  catch(e){ return []; }
-}
-function saveLead(record){
+async function saveLead(record){
   try{
-    const leads = getLeads();
-    leads.push(record);
-    localStorage.setItem('metaworks_leads', JSON.stringify(leads));
-  }catch(e){ console.warn('storage save failed', e); }
+    await supabase.from('leads').insert({
+      name: record.name,
+      email: record.email,
+      phone: record.phone,
+      interest: record.interest,
+      message: record.message
+    });
+  }catch(e){ console.warn('Supabase save failed', e); }
 }
 
 /* ============================================================
@@ -483,7 +495,7 @@ function fallbackMessage(){
 
 async function runPipeline(){
   const message = await generateMessage();
-  await saveLead({ ...answers, message, ts: Date.now() });
+  await saveLead({ ...answers, message });
   renderThanks();
 }
 
