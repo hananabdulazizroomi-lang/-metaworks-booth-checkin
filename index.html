@@ -299,15 +299,6 @@
     <h1 class="title" data-i18n="thanks_title">Thank you!</h1>
     <p class="subtitle" data-i18n="thanks_subtitle">Thank you for visiting Meta Works. Meta Works is glad to greet you!</p>
 
-    <div class="divider"><div class="line"></div><div class="dot"></div><div class="line"></div></div>
-
-    <div class="quote-row">
-      <div class="quote-num">1</div>
-      <div class="quote-text" id="quote-text"></div>
-    </div>
-
-    <div class="email-note" id="email-note"></div>
-
     <div class="spacer"></div>
     <button class="btn btn-gold" id="done-btn" data-i18n="btn_done">Done</button>
   </div>
@@ -621,12 +612,6 @@ async function runPipeline(){
 }
 
 function renderThanks(){
-  const [line1, line2] = CONFIG.CLOSING_LINE.split('\n');
-  document.getElementById('quote-text').innerHTML =
-    `"${line1}"<span class="signoff">${line2 || ''}</span>`;
-
-  document.getElementById('email-note').textContent =
-    `Your info has been saved. We'll follow up at ${answers.email}`;
   show('thanks');
 }
 
