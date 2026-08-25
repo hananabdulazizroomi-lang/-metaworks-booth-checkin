@@ -323,10 +323,24 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
    EDIT BEFORE THE EVENT
    ============================================================ */
+emailjs.init({ publicKey: 'uqtYlBpwruDaSN6mf' });
+
+const EMAILJS_SERVICE_ID  = 'service_8s0zguo';
+const EMAILJS_TEMPLATE_ID = 'template_zuolaxe';
+
+const supabaseClient = supabase.createClient(
+  'https://bveiweldbvlwbgzvoovd.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZWl3ZWxkYnZsd2JnenZvb3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTQ2MjUsImV4cCI6MjEwMzIzMDYyNX0.Asyz75q_tu_Hab_RkLXg72Bv2p9hVkiSRV6fhCF6ZvA'
+);
+
+const CLAUDE_API_KEY = '';
+
 const CONFIG = {
   STARTUP_NAME: "Metaworks",
   STARTUP_PITCH: "Metaworks helps businesses protect what matters most — describe your real product here in 1-2 sentences so Claude writes on-topic emails.",
@@ -503,7 +517,8 @@ nextBtn.onclick = () => {
    STAFF VIEW — load all captured leads + Excel export
    ============================================================ */
 async function loadLeads(){
-  return getLeads().sort((a,b) => (b.ts||0) - (a.ts||0));
+  const leads = await getLeads();
+  return leads.sort((a,b) => (b.created_at||'').localeCompare(a.created_at||''));
 }
 
 async function openStaffView(){
@@ -560,18 +575,27 @@ document.getElementById('done-btn').onclick = () => {
 };
 
 /* ============================================================
-   STORAGE — lead log via localStorage (works on GitHub Pages)
+   STORAGE — Supabase
    ============================================================ */
-function getLeads(){
-  try{ return JSON.parse(localStorage.getItem('metaworks_leads') || '[]'); }
-  catch(e){ return []; }
+async function getLeads(){
+  const { data, error } = await supabaseClient
+    .from('leads')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) { console.warn('Supabase read failed:', error); return []; }
+  return data || [];
 }
-function saveLead(record){
-  try{
-    const leads = getLeads();
-    leads.push(record);
-    localStorage.setItem('metaworks_leads', JSON.stringify(leads));
-  }catch(e){ console.warn('storage save failed', e); }
+async function saveLead(record){
+  const { error } = await supabaseClient
+    .from('leads')
+    .insert({
+      name:     record.name,
+      email:    record.email,
+      phone:    record.phone,
+      interest: record.interest,
+      message:  record.message
+    });
+  if (error) console.warn('Supabase save failed:', error);
 }
 
 /* ============================================================
@@ -592,7 +616,11 @@ Return ONLY the message body text.`;
   try{
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": CLAUDE_API_KEY,
+        "anthropic-version": "2023-06-01"
+      },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
         max_tokens: 300,
@@ -615,6 +643,20 @@ function fallbackMessage(){
 async function runPipeline(){
   const message = await generateMessage();
   await saveLead({ ...answers, message, ts: Date.now() });
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      name:    answers.name,
+      email:   answers.email,
+      phone:   answers.phone,
+      interest:answers.interest,
+      message: message
+    });
+    console.log('Email sent to', answers.email);
+  } catch(err) {
+    console.error('Email send failed:', err);
+  }
+
   renderThanks();
 }
 
