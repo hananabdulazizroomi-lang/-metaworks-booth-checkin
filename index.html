@@ -312,7 +312,7 @@ const CONFIG = {
 
 const SUPABASE_URL = "https://bveiweldbvlwbgzvoovd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZWl3ZWxkYnZsd2JnenZvb3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTQ2MjUsImV4cCI6MjEwMzIzMDYyNX0.Asyz75q_tu_Hab_RkLXg72Bv2p9hVkiSRV6fhCF6ZvA";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const answers = { name:"", email:"", phone:"", interest:"" };
 
@@ -379,7 +379,7 @@ nextBtn.onclick = () => {
    ============================================================ */
 async function loadLeads(){
   try{
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('leads')
       .select('*')
       .order('created_at', { ascending: false });
@@ -445,7 +445,7 @@ document.getElementById('done-btn').onclick = () => {
    ============================================================ */
 async function saveLead(record){
   try{
-    await supabase.from('leads').insert({
+    await db.from('leads').insert({
       name: record.name,
       email: record.email,
       phone: record.phone,
