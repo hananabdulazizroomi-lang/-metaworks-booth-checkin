@@ -327,8 +327,16 @@
       <input type="email" id="in-email" data-i18n-placeholder="ph_email" placeholder="Enter your email">
     </div>
     <div class="field">
-      <label data-i18n="label_whatsapp">WhatsApp number</label>
+      <label data-i18n="label_phone">Phone number</label>
       <input type="tel" id="in-phone" data-i18n-placeholder="ph_phone" placeholder="Enter your phone number">
+    </div>
+    <div class="field">
+      <label data-i18n="label_role">Role / Job Title</label>
+      <input type="text" id="in-role" data-i18n-placeholder="ph_role" placeholder="Enter your role">
+    </div>
+    <div class="field">
+      <label data-i18n="label_company">Company</label>
+      <input type="text" id="in-company" data-i18n-placeholder="ph_company" placeholder="Enter your company name">
     </div>
 
     <div class="field">
@@ -425,7 +433,7 @@ const CONFIG = {
   ]
 };
 
-const answers = { name:"", email:"", phone:"", interest:"" };
+const answers = { name:"", email:"", phone:"", role:"", company:"", interest:"" };
 
 const screens = {
   splash: document.getElementById('screen-splash'),
@@ -449,7 +457,9 @@ const I18N = {
     form_subtitle: "Just a few quick questions",
     label_name: "Name", ph_name: "Enter your name",
     label_email: "Email", ph_email: "Enter your email",
-    label_whatsapp: "WhatsApp number", ph_phone: "Enter your phone number",
+    label_phone: "Phone number", ph_phone: "Enter your phone number",
+    label_role: "Role / Job Title", ph_role: "Enter your role",
+    label_company: "Company", ph_company: "Enter your company name",
     chip_question: "What brought you to our booth?",
     btn_next: "Next", processing: "Writing your welcome note…",
     thanks_title: "Thank you!",
@@ -464,7 +474,9 @@ const I18N = {
     form_subtitle: "فقط بضع أسئلة سريعة",
     label_name: "الاسم", ph_name: "أدخل اسمك",
     label_email: "البريد الإلكتروني", ph_email: "أدخل بريدك الإلكتروني",
-    label_whatsapp: "رقم واتساب", ph_phone: "أدخل رقم هاتفك",
+    label_phone: "رقم الهاتف", ph_phone: "أدخل رقم هاتفك",
+    label_role: "المسمى الوظيفي", ph_role: "أدخل مسمى وظيفتك",
+    label_company: "الشركة", ph_company: "أدخل اسم شركتك",
     chip_question: "ما الذي جعلك تزور جناحنا؟",
     btn_next: "التالي", processing: "جاري كتابة رسالة الترحيب...",
     thanks_title: "شكراً لك!",
@@ -479,7 +491,9 @@ const I18N = {
     form_subtitle: "Quelques questions rapides",
     label_name: "Nom", ph_name: "Entrez votre nom",
     label_email: "E-mail", ph_email: "Entrez votre e-mail",
-    label_whatsapp: "Numéro WhatsApp", ph_phone: "Entrez votre numéro",
+    label_phone: "Numéro de téléphone", ph_phone: "Entrez votre numéro",
+    label_role: "Poste / Titre", ph_role: "Entrez votre poste",
+    label_company: "Entreprise", ph_company: "Entrez le nom de votre entreprise",
     chip_question: "Qu'est-ce qui vous a amené à notre stand ?",
     btn_next: "Suivant", processing: "Rédaction de votre message…",
     thanks_title: "Merci !",
@@ -494,7 +508,9 @@ const I18N = {
     form_subtitle: "बस कुछ त्वरित सवाल",
     label_name: "नाम", ph_name: "अपना नाम दर्ज करें",
     label_email: "ईमेल", ph_email: "अपना ईमेल दर्ज करें",
-    label_whatsapp: "व्हाट्सएप नंबर", ph_phone: "अपना फ़ोन नंबर दर्ज करें",
+    label_phone: "फ़ोन नंबर", ph_phone: "अपना फ़ोन नंबर दर्ज करें",
+    label_role: "पद / नौकरी का शीर्षक", ph_role: "अपना पद दर्ज करें",
+    label_company: "कंपनी", ph_company: "अपनी कंपनी का नाम दर्ज करें",
     chip_question: "आप हमारे बूथ में क्यों आए?",
     btn_next: "अगला", processing: "आपका स्वागत संदेश लिखा जा रहा है...",
     thanks_title: "धन्यवाद!",
@@ -509,7 +525,9 @@ const I18N = {
     form_subtitle: "صرف چند جلدی سوالات",
     label_name: "نام", ph_name: "اپنا نام درج کریں",
     label_email: "ای میل", ph_email: "اپنا ای میل درج کریں",
-    label_whatsapp: "واٹس ایپ نمبر", ph_phone: "اپنا فون نمبر درج کریں",
+    label_phone: "فون نمبر", ph_phone: "اپنا فون نمبر درج کریں",
+    label_role: "عہدہ / نوکری کا عنوان", ph_role: "اپنا عہدہ درج کریں",
+    label_company: "کمپنی", ph_company: "اپنی کمپنی کا نام درج کریں",
     chip_question: "آپ ہمارے بوتھ میں کیوں آئے؟",
     btn_next: "اگلا", processing: "آپ کا خوش آمدید پیغام لکھا جا رہا ہے...",
     thanks_title: "شکریہ!",
@@ -555,12 +573,15 @@ buildTranslatedChips();
 const nameInput = document.getElementById('in-name');
 const emailInput = document.getElementById('in-email');
 const phoneInput = document.getElementById('in-phone');
+const roleInput = document.getElementById('in-role');
+const companyInput = document.getElementById('in-company');
 const nextBtn = document.getElementById('next-btn');
 
 function validate(){
+  const nameOk = nameInput.value.trim().length > 1;
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
   const phoneOk = phoneInput.value.replace(/[^0-9]/g,'').length >= 7;
-  nextBtn.disabled = !(nameInput.value.trim().length > 1 && emailOk && phoneOk && answers.interest);
+  nextBtn.disabled = !(nameOk && emailOk && phoneOk && answers.interest);
 }
 nameInput.addEventListener('input', validate);
 emailInput.addEventListener('input', validate);
@@ -579,6 +600,8 @@ nextBtn.onclick = () => {
   answers.name = nameInput.value.trim();
   answers.email = emailInput.value.trim();
   answers.phone = phoneInput.value.trim();
+  answers.role = roleInput.value.trim();
+  answers.company = companyInput.value.trim();
   show('processing');
   runPipeline();
 };
@@ -602,8 +625,8 @@ async function openStaffView(){
   countEl.textContent = n + (currentLang === 'en' ? ` lead${n===1?'':'s'} captured` : ` leads captured`);
   listEl.innerHTML = leads.map(l => `
     <div style="padding:10px 0; border-bottom:1px solid var(--line); font-size:13px;">
-      <strong>${l.name||'—'}</strong> · ${l.interest||''}<br>
-      <span style="color:var(--muted)">${l.email||''} · ${l.phone||''}</span>
+      <strong>${l.name||'—'}</strong> · ${l.role||''} · ${l.company||''}<br>
+      <span style="color:var(--muted)">${l.interest||''} · ${l.email||''} · ${l.phone||''}</span>
     </div>
   `).join('') || `<div style="color:var(--muted); font-size:13px;">${t('no_leads')}</div>`;
 
@@ -616,10 +639,10 @@ function csvEscape(val){
 }
 
 function exportLeadsToExcel(leads){
-  const headers = ['Name','Email','Phone','Interest','Message Sent','Captured At'];
+  const headers = ['Name','Email','Phone','Role','Company','Interest','Message Sent','Captured At'];
   const rows = leads.map(l => [
-    l.name, l.email, l.phone, l.interest, l.message,
-    l.ts ? new Date(l.ts).toLocaleString() : ''
+    l.name, l.email, l.phone, l.role, l.company, l.interest, l.message,
+    l.created_at || ''
   ]);
   const csv = [headers, ...rows].map(r => r.map(csvEscape).join(',')).join('\r\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -637,8 +660,8 @@ document.getElementById('staff-back-btn').onclick = () => show('splash');
 
 document.getElementById('done-btn').onclick = () => {
 
-  nameInput.value=''; emailInput.value=''; phoneInput.value='';
-  answers.name=''; answers.email=''; answers.phone=''; answers.interest='';
+  nameInput.value=''; emailInput.value=''; phoneInput.value=''; roleInput.value=''; companyInput.value='';
+  answers.name=''; answers.email=''; answers.phone=''; answers.role=''; answers.company=''; answers.interest='';
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
   validate();
   show('splash');
@@ -662,6 +685,8 @@ async function saveLead(record){
       name:     record.name,
       email:    record.email,
       phone:    record.phone,
+      role:     record.role,
+      company:  record.company,
       interest: record.interest,
       message:  record.message
     });
@@ -677,6 +702,7 @@ async function generateMessage(){
 RULES — follow ALL of these strictly:
 - Start with "Hi [first name]," 
 - Mention their interest: "${answers.interest}"
+- If they have a company: "${answers.company}" and role: "${answers.role}", reference them naturally
 - Keep it to exactly 2-3 short sentences
 - Tone: warm, professional, confident
 - NO emojis, NO exclamation marks, NO fluff
@@ -686,6 +712,8 @@ RULES — follow ALL of these strictly:
 - The company tagline is: "Behind every successful business is a security."
 
 Visitor name: ${answers.name}
+Visitor role: ${answers.role || 'Not provided'}
+Visitor company: ${answers.company || 'Not provided'}
 Visitor interest: ${answers.interest}
 
 Return ONLY the email body text. Nothing else.`;
@@ -726,6 +754,8 @@ async function runPipeline(){
       name:    answers.name,
       email:   answers.email,
       phone:   answers.phone,
+      role:    answers.role,
+      company: answers.company,
       interest:answers.interest,
       message: message
     });
