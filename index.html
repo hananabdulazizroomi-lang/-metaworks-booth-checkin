@@ -198,6 +198,72 @@
     position:absolute; top:12px; right:12px; z-index:10;
   }
   body[dir="rtl"] .lang-selector{ right:auto; left:12px; }
+  /* --- RESPONSIVE — phones, tablets, laptops, desktops --- */
+  @media (max-width: 380px){
+    .frame{ padding: 28px 18px 22px; border-radius: 22px; }
+    #screen-splash img{ width:110px; }
+    #screen-splash .wordmark{ font-size: 22px; }
+    h1.title{ font-size: 18px; }
+    .chip{ padding: 7px 10px; font-size: 12px; }
+    .field input{ padding: 9px 10px; font-size: 13px; }
+    .btn{ padding: 12px; font-size: 14px; }
+  }
+
+  @media (min-width: 768px){
+    .frame{ max-width: 460px; padding: 44px 36px 36px; }
+    #screen-splash img{ width: 170px; }
+    #screen-splash .wordmark{ font-size: 32px; }
+    h1.title{ font-size: 23px; }
+    p.subtitle{ font-size: 14px; }
+    .field input{ padding: 14px 16px; font-size: 15px; }
+    .chip{ padding: 10px 16px; font-size: 14px; }
+    .btn{ padding: 16px; font-size: 16px; }
+    .steps{ margin: 26px 0 34px; }
+    .step-dot{ width:30px; height:30px; font-size:13px; }
+    .step-line{ width:52px; }
+    .brand-block img{ width: 100px; }
+  }
+
+  @media (min-width: 1024px){
+    .frame{ max-width: 480px; border-radius: 32px; }
+    #screen-splash img{ width: 190px; }
+    #screen-splash .wordmark{ font-size: 36px; }
+    h1.title{ font-size: 25px; }
+    .field label{ font-size: 14px; }
+    .field input{ padding: 16px 18px; font-size: 16px; border-radius: 12px; }
+    .chip{ padding: 12px 18px; font-size: 15px; border-radius: 999px; }
+    .btn{ padding: 18px; font-size: 17px; border-radius: 14px; }
+    .check-circle{ width:72px; height:72px; }
+    .check-circle svg{ width:32px; height:32px; }
+  }
+
+  /* --- touch devices --- */
+  @media (hover:none) and (pointer:coarse){
+    .chip:active{ transform: scale(0.96); }
+    .btn:active{ transform: scale(0.97); }
+    .field input{ font-size: 16px; }
+  }
+
+  /* --- landscape phones --- */
+  @media (max-height: 500px) and (orientation:landscape){
+    body{ padding: 8px 16px; }
+    .frame{ min-height: auto; max-height: 98vh; padding: 16px 24px; }
+    #screen-splash img{ width: 80px; margin-bottom: 8px; }
+    #screen-splash .wordmark{ font-size: 18px; margin-bottom: 10px; }
+    .steps{ margin: 8px 0 12px; }
+    .step-dot{ width:22px; height:22px; font-size:10px; }
+    .step-line{ width:30px; }
+    h1.title{ font-size: 16px; margin-bottom: 2px; }
+    p.subtitle{ font-size: 11px; margin-bottom: 10px; }
+    .field{ margin-bottom: 8px; }
+    .field label{ font-size: 11px; margin-bottom: 4px; }
+    .field input{ padding: 7px 10px; font-size: 13px; }
+    .chip{ padding: 5px 10px; font-size: 11px; }
+    .btn{ padding: 10px; font-size: 14px; margin-top: 8px; }
+    .check-circle{ width:48px; height:48px; margin: 4px auto 10px; }
+    .check-circle svg{ width:20px; height:20px; }
+  }
+
   .lang-selector select{
     padding:6px 24px 6px 10px; font-size:12px; font-weight:600;
     border:1px solid var(--line); border-radius:8px;
