@@ -119,6 +119,21 @@
   .field input:focus{ border-color: var(--gold-mid); }
   .field input::placeholder{ color:#BDB6A5; }
 
+  .phone-row{ display:flex; gap:8px; }
+  .phone-row select{
+    width: 130px; flex-shrink:0; padding: 12px 8px; font-size:14px;
+    border: 1px solid var(--line); border-radius: 10px;
+    font-family:'Inter', sans-serif; color: var(--ink);
+    outline:none; background: #FFFEFC; cursor:pointer;
+    -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A8478' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+  }
+  .phone-row select:focus{ border-color: var(--gold-mid); }
+  .phone-row input{ flex:1; }
+
   .chip-label{ font-size:12.5px; font-weight:600; margin-bottom:10px; }
   .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 8px; }
   .chip{
@@ -229,7 +244,10 @@
     </div>
     <div class="field">
       <label>Phone number</label>
-      <input type="tel" id="in-phone" placeholder="Enter your phone number">
+      <div class="phone-row">
+        <select id="in-country"></select>
+        <input type="tel" id="in-phone" placeholder="Enter your phone number">
+      </div>
     </div>
 
     <div class="field">
@@ -314,6 +332,41 @@ const SUPABASE_URL = "https://bveiweldbvlwbgzvoovd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZWl3ZWxkYnZsd2JnenZvb3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTQ2MjUsImV4cCI6MjEwMzIzMDYyNX0.Asyz75q_tu_Hab_RkLXg72Bv2p9hVkiSRV6fhCF6ZvA";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+const COUNTRY_CODES = [
+  {code:"+1",country:"US",flag:"🇺🇸"},{code:"+1",country:"CA",flag:"🇨🇦"},
+  {code:"+44",country:"GB",flag:"🇬🇧"},{code:"+91",country:"IN",flag:"🇮🇳"},
+  {code:"+971",country:"AE",flag:"🇦🇪"},{code:"+966",country:"SA",flag:"🇸🇦"},
+  {code:"+974",country:"QA",flag:"🇶🇦"},{code:"+973",country:"BH",flag:"🇧🇭"},
+  {code:"+968",country:"OM",flag:"🇴🇲"},{code:"+965",country:"KW",flag:"🇰🇼"},
+  {code:"+962",country:"JO",flag:"🇯🇴"},{code:"+961",country:"LB",flag:"🇱🇧"},
+  {code:"+20",country:"EG",flag:"🇪🇬"},{code:"+234",country:"NG",flag:"🇳🇬"},
+  {code:"+27",country:"ZA",flag:"🇿🇦"},{code:"+254",country:"KE",flag:"🇰🇪"},
+  {code:"+49",country:"DE",flag:"🇩🇪"},{code:"+33",country:"FR",flag:"🇫🇷"},
+  {code:"+39",country:"IT",flag:"🇮🇹"},{code:"+34",country:"ES",flag:"🇪🇸"},
+  {code:"+31",country:"NL",flag:"🇳🇱"},{code:"+46",country:"SE",flag:"🇸🇪"},
+  {code:"+47",country:"NO",flag:"🇳🇴"},{code:"+48",country:"PL",flag:"🇵🇱"},
+  {code:"+7",country:"RU",flag:"🇷🇺"},{code:"+86",country:"CN",flag:"🇨🇳"},
+  {code:"+81",country:"JP",flag:"🇯🇵"},{code:"+82",country:"KR",flag:"🇰🇷"},
+  {code:"+61",country:"AU",flag:"🇦🇺"},{code:"+64",country:"NZ",flag:"🇳🇿"},
+  {code:"+55",country:"BR",flag:"🇧🇷"},{code:"+52",country:"MX",flag:"🇲🇽"},
+  {code:"+60",country:"MY",flag:"🇲🇾"},{code:"+65",country:"SG",flag:"🇸🇬"},
+  {code:"+66",country:"TH",flag:"🇹🇭"},{code:"+63",country:"PH",flag:"🇵🇭"},
+  {code:"+62",country:"ID",flag:"🇮🇩"},{code:"+84",country:"VN",flag:"🇻🇳"},
+  {code:"+92",country:"PK",flag:"🇵🇰"},{code:"+94",country:"LK",flag:"🇱🇰"},
+  {code:"+90",country:"TR",flag:"🇹🇷"},{code:"+353",country:"IE",flag:"🇮🇪"},
+  {code:"+351",country:"PT",flag:"🇵🇹"},{code:"+41",country:"CH",flag:"🇨🇭"},
+  {code:"+43",country:"AT",flag:"🇦🇹"},{code:"+32",country:"BE",flag:"🇧🇪"}
+];
+
+const countrySelect = document.getElementById('in-country');
+COUNTRY_CODES.forEach(c => {
+  const opt = document.createElement('option');
+  opt.value = c.code;
+  opt.textContent = `${c.flag} ${c.code} ${c.country}`;
+  countrySelect.appendChild(opt);
+});
+countrySelect.value = "+1";
+
 const answers = { name:"", email:"", phone:"", interest:"" };
 
 const screens = {
@@ -346,11 +399,12 @@ CONFIG.INTEREST_OPTIONS.forEach(opt => {
 const nameInput = document.getElementById('in-name');
 const emailInput = document.getElementById('in-email');
 const phoneInput = document.getElementById('in-phone');
+const countrySelectEl = document.getElementById('in-country');
 const nextBtn = document.getElementById('next-btn');
 
 function validate(){
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
-  const phoneOk = phoneInput.value.replace(/[^0-9]/g,'').length >= 7;
+  const phoneOk = phoneInput.value.replace(/[^0-9]/g,'').length >= 4;
   nextBtn.disabled = !(nameInput.value.trim().length > 1 && emailOk && phoneOk && answers.interest);
 }
 nameInput.addEventListener('input', validate);
@@ -369,7 +423,7 @@ screens.splash.onclick = () => {
 nextBtn.onclick = () => {
   answers.name = nameInput.value.trim();
   answers.email = emailInput.value.trim();
-  answers.phone = phoneInput.value.trim();
+  answers.phone = countrySelectEl.value + ' ' + phoneInput.value.trim();
   show('processing');
   runPipeline();
 };
