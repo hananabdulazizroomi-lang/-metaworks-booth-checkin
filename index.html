@@ -602,16 +602,23 @@ async function saveLead(record){
    CLAUDE + EMAIL PIPELINE
    ============================================================ */
 async function generateMessage(){
-  const prompt = `You are writing a short, warm welcome email (3-4 sentences, no subject line, no "Dear" salutation, no sign-off) from the startup "${CONFIG.STARTUP_NAME}" to someone who just visited their booth.
+  const prompt = `Write a SHORT welcome email (2-3 sentences ONLY) from "Metaworks" to a trade show visitor.
 
-Startup pitch: ${CONFIG.STARTUP_PITCH}
+RULES — follow ALL of these strictly:
+- Start with "Hi [first name]," 
+- Mention their interest: "${answers.interest}"
+- Keep it to exactly 2-3 short sentences
+- Tone: warm, professional, confident
+- NO emojis, NO exclamation marks, NO fluff
+- NO "Dear", NO sign-off, NO "Best regards"
+- NO making up facts about the company
+- NO more than 30 words total
+- The company tagline is: "Behind every successful business is a security."
 
 Visitor name: ${answers.name}
-Visitor's stated interest: ${answers.interest}
+Visitor interest: ${answers.interest}
 
-Write in second person, friendly and professional, referencing their interest naturally. Close the email by weaving in the spirit of this brand line (reword it naturally, don't quote it verbatim): "${CONFIG.CLOSING_LINE.replace(/\n/g,' ')}"
-
-Return ONLY the message body text.`;
+Return ONLY the email body text. Nothing else.`;
 
   try{
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -623,7 +630,7 @@ Return ONLY the message body text.`;
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 300,
+        max_tokens: 150,
         messages: [{ role: "user", content: prompt }]
       })
     });
